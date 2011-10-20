@@ -9,7 +9,13 @@ use <ParametricHerringboneGears.scad> //Import the gears library
 
 //TRipod Diameter 21.6mm
 
-TripodDiameter = 21.6;
+tripodDiameter = 23.5;
+tripodRadius = tripodDiameter/2;
+
+wallThickness = 20;
+
+coverRadius = tripodRadius + wallThickness;
+coverHeight = 60;
 
 stepperShaft = 4.79;
 stepperSide = 41.9;
@@ -40,11 +46,17 @@ distance_between_axels = 180*(gear1_teeth + gear2_teeth)*(bigGearDiameter)/(gear
 
 
 module interiorDifference() {
-
+translate([0,0,50])
+cylinder(r=tripodRadius,h=100,center = true);
 }
 
 module baseBottom() {
-cube([lazySusanSide,lazySusanSide,5],center=true);
+difference() { //difference the cover from the shaft
+translate([0,0,coverHeight/2 + gear_h])
+cylinder(r=coverRadius,h=coverHeight,center=true);
+
+interiorDifference();
+}
 }
 
 module baseGear() {
@@ -62,5 +74,29 @@ module smallGear() {
 
 }
 
-baseGear();
+module chopInFour(chop=1) {
+intersection() {
 
+union() {
+baseGear();
+baseBottom();
+}
+
+if (chop==1){
+cube(200,200,200);
+} else if (chop==2){
+translate([0,-200,0])
+cube(200,200,200);
+} else if (chop==3){
+translate([-200,-200,0])
+cube(200,200,200);
+} else if (chop==4){
+translate([-200,0,0])
+cube(200,200,200);
+}
+
+}
+
+}
+
+chopInFour(1);
