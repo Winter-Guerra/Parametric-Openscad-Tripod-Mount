@@ -17,14 +17,16 @@ wallThickness = 20;
 coverRadius = tripodRadius + wallThickness;
 coverHeight = 60;
 
+tripodScrewDiameter = 4;
+tripodScrewRadius = tripodScrewDiameter/2;
+
 stepperShaft = 4.79;
 stepperSide = 41.9;
 stepperShaftHeight = 32.8;
 
 generate = 2;
 
-
-gear_h = 15;
+gear_h = 15; //height of the gear
 gear_shaft_h = 15;
 
 gear2_teeth = 50; //2:1 ratio!
@@ -55,8 +57,29 @@ difference() { //difference the cover from the shaft
 translate([0,0,coverHeight/2 + gear_h])
 cylinder(r=coverRadius,h=coverHeight,center=true);
 
-interiorDifference();
+interiorDifference(); //Interior pipe
+
+tripodCoverScrewsDifference(); //Knock out two holes in the cover for potentially screwing in screws. (4mm diameter) 
 }
+}
+
+module tripodCoverScrewsDifference() {
+//Difference out the screw holes.
+translate([0,0,gear_h + coverHeight/5])
+rotate([90,0,45])
+cylinder(r=tripodScrewRadius,h=100,center=true,$fn=10);
+
+translate([0,0,gear_h + coverHeight/5])
+rotate([90,0,-45])
+cylinder(r=tripodScrewRadius,h=100,center=true,$fn=10);
+
+translate([0,0,gear_h + 4*coverHeight/5])
+rotate([90,0,45])
+cylinder(r=tripodScrewRadius,h=100,center=true,$fn=10);
+
+translate([0,0,gear_h + 4*coverHeight/5])
+rotate([90,0,-45])
+cylinder(r=tripodScrewRadius,h=100,center=true,$fn=10);
 }
 
 module baseGear() {
