@@ -35,22 +35,22 @@ gear1_captive_nut_h = 3;
 
 // GEAR2 (LARGER GEAR, DRIVE SHAFT GEAR) OPTIONS:
 gear2_teeth = 51;
-gear2_shaft_d = 8.5;
+gear2_shaft_d = 0;
 gear2_shaft_r  = gear2_shaft_d/2;
 // gear2 has settable outer shaft diameter.
-gear2_shaft_outer_d = 21;
+gear2_shaft_outer_d = 0;
 gear2_shaft_outer_r  = gear2_shaft_outer_d/2;
 
 // gear2 has a hex bolt set in it, is either a hobbed bolt or has the nifty hobbed gear from MBI on it.
-gear2_bolt_hex_d       = 15;
+gear2_bolt_hex_d       = 0;
 gear2_bolt_hex_r        = gear2_bolt_hex_d/2;
 // gear2_bolt_sink: How far down the gear shaft the bolt head sits; measured as distance from drive end of gear.
-gear2_bolt_sink          = 15;		
+gear2_bolt_sink          = 0;		
 // gear2's shaft is a bridge above the hex bolt shaft; this creates 1/3bridge_helper_h sized steps at top of shaft to help bridging.  (so bridge_helper_h/3 should be > layer height to have any effect)
 bridge_helper_h=3;
 
 gear2_rim_margin = 0;
-gear2_cut_circles  = 5;
+gear2_cut_circles  = 0;
 
 // gear2 setscrew option; not likely needed.
 gear2_setscrew_offset = 0;
