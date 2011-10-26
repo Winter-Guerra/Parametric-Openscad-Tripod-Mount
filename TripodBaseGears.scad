@@ -15,7 +15,7 @@ tripodRadius = tripodDiameter/2;
 wallThickness = 20;
 
 coverRadius = tripodRadius + wallThickness;
-coverHeight = 60;
+coverHeight = 50;
 
 tripodScrewDiameter = 4;
 tripodScrewRadius = tripodScrewDiameter/2;
@@ -26,8 +26,8 @@ stepperShaftHeight = 32.8;
 
 generate = 2;
 
-gear_h = 15; //height of the gear
-gear_shaft_h = 15;
+gear_h = 15; //height of the gear THIS LINE CURRENTLY DOES NOT WORK FIX ME PLZ!
+gear_shaft_h = 20;
 
 gear2_teeth = 50; //2:1 ratio!
 gear1_teeth = 25;
@@ -122,4 +122,6 @@ cube(200,200,200);
 
 }
 
-chopInFour(1);
+union(){
+chopInFour(4); //Make the gear! (Chopped into quarters!)
+}
