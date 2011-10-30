@@ -15,7 +15,7 @@ generate = 0;    // GENERATE BOTH GEARS FOR VIEWING
 // OPTIONS COMMON TO BOTH GEARS:
 distance_between_axels = 60;
 gear_h = 15;
-gear_shaft_h = 15;
+gear_shaft_h = 3.8;
 
 
 // GEAR1 (SMALLER GEAR, STEPPER GEAR) OPTIONS:
@@ -25,9 +25,16 @@ gear1_shaft_d = 5.25;  			// diameter of motor shaft
 gear1_shaft_r  = gear1_shaft_d/2;	
 // gear1 shaft assumed to fill entire gear.
 // gear1 attaches by means of a captive nut and bolt (or actual setscrew)
-gear1_setscrew_offset = 5;			// Distance from motor on motor shaft.
+
+hub_Wall_Thickness = 15;
+gear1_hub_diameter = gear1_shaft_d + (2*hub_Wall_Thickness);
+
+gear1_setscrew_offset = gear_shaft_h/2;			// Distance from motor on motor shaft. HALF
+
 gear1_setscrew_d         = 3.5;		
 gear1_setscrew_r          = gear1_setscrew_d/2;
+gear1_setscrew_head_d         = 6;	
+gear1_setscrew_head_r          = gear1_setscrew_head_d/2;
 gear1_captive_nut_d = 6.2;
 gear1_captive_nut_r  = gear1_captive_nut_d/2;
 gear1_captive_nut_h = 3;
@@ -108,11 +115,11 @@ module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1)
 				gear(	twist = g1twist, 
 					number_of_teeth=t1, 
 					circular_pitch=cp, 
-					gear_thickness = gear_shaft_h + (gear_h/2)+AT, 
+					gear_thickness = (gear_h/2)+AT, 
 					rim_thickness = (gear_h/2)+AT, 
-					rim_width = 0,
-					hub_thickness = (gear_h/2)+AT, 
-					hub_width = 0,
+					rim_width = g1p_r,
+					hub_diameter = gear1_hub_diameter,
+					hub_thickness = gear_shaft_h + (gear_h/2)+AT, 
 					bore_diameter=0); 
 	
 			translate([0,0,(gear_h/2) + AT])
@@ -121,8 +128,10 @@ module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1)
 					number_of_teeth=t1, 
 					circular_pitch=cp, 
 					gear_thickness = (gear_h/2)+AT, 
-					rim_thickness = (gear_h/2)+AT, 
-					hub_thickness = (gear_h/2)+AT, 
+					rim_thickness = (gear_h/2)+AT,
+					rim_width = g1p_r,
+					hub_diameter = gear1_hub_diameter, 
+					hub_thickness = 0, 
 					bore_diameter=0); 
 		}
 			//DIFFERENCE:
@@ -133,10 +142,15 @@ module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1)
 			//setscrew shaft
 			translate([0,0,gear_h+gear_shaft_h-gear1_setscrew_offset])
 				rotate([0,90,0])
-				cylinder(r=gear1_setscrew_r, h=g1p_r);
+				cylinder(r=gear1_setscrew_r, h=gear1_hub_diameter/2);
+
+			//setscrew shaft head clearance
+			translate([0,0,gear_h+gear_shaft_h-gear1_setscrew_offset])
+				rotate([0,90,0])
+				cylinder(r=gear1_setscrew_head_r, h=2*g1p_r); //FIX THIS!! THIS SHOULD NOT BE 2X g1p_r. Should be the actual sie of the gear w/teath!
 
 			//setscrew captive nut
-			translate([(g1p_r)/2, 0, gear_h+gear_shaft_h-gear1_captive_nut_r-gear1_setscrew_offset]) 
+			translate([(gear1_hub_diameter/2)/2, 0, gear_h+gear_shaft_h-gear1_captive_nut_r-gear1_setscrew_offset]) 
 				translate([0,0,(gear1_captive_nut_r+gear1_setscrew_offset)/2])
 					#cube([gear1_captive_nut_h, gear1_captive_nut_d, gear1_captive_nut_r+gear1_setscrew_offset+ST],center=true);
 			

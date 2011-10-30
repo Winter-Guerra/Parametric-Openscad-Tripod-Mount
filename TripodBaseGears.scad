@@ -27,7 +27,7 @@ stepperShaftHeight = 32.8;
 generate = 2;
 
 gear_h = 15; //height of the gear THIS LINE CURRENTLY DOES NOT WORK FIX ME PLZ!
-gear_shaft_h = 20;
+gear_shaft_h = 15;
 
 gear2_teeth = 50; //2:1 ratio!
 gear1_teeth = 25;
@@ -94,7 +94,7 @@ cube([lazySusanSide,lazySusanSide,lazySusanOffset],center=true);
 }
 
 module smallGear() {
-
+gearsbyteethanddistance(t1 = gear1_teeth, t2 = gear2_teeth, d=distance_between_axels, which=1);
 }
 
 module chopInFour(chop=1) {
@@ -122,6 +122,8 @@ cube(200,200,200);
 
 }
 
-union(){
-chopInFour(4); //Make the gear! (Chopped into quarters!)
-}
+smallGear();
+
+//union(){
+//chopInFour(4); //Make the gear! (Chopped into quarters!)
+//}
