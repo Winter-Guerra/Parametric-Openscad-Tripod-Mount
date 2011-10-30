@@ -8,25 +8,21 @@ include <MCAD/involute_gears.scad>
 
 
 // WHAT TO GENERATE?
-generate = 0;    // GENERATE BOTH GEARS FOR VIEWING
+generate = 1;    // GENERATE BOTH GEARS FOR VIEWING
 // generate = 1;    // GENERATE STEPPER GEAR FOR PRINTING
 // generate = 2;    // GENERATE DRIVE GEAR FOR PRINTING
 
-// OPTIONS COMMON TO BOTH GEARS:
-distance_between_axels = 60;
-gear_h = 15;
-gear_shaft_h = 3.8;
 
 
 // GEAR1 (SMALLER GEAR, STEPPER GEAR) OPTIONS:
 // It's helpful to choose prime numbers for the gear teeth.
 gear1_teeth = 13;
-gear1_shaft_d = 5.25;  			// diameter of motor shaft
+gear1_shaft_d = 5.4;  			// diameter of motor shaft
 gear1_shaft_r  = gear1_shaft_d/2;	
 // gear1 shaft assumed to fill entire gear.
 // gear1 attaches by means of a captive nut and bolt (or actual setscrew)
 
-hub_wall_thickness = 15;
+hub_wall_thickness = 14.5;
 
 gear1_hub_diameter = gear1_shaft_d + (2*hub_wall_thickness);
 gear1_hub_radius = gear1_hub_diameter/2;
@@ -90,7 +86,7 @@ module bridge_helper()
 
 
 
-module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1, gear_direction = 1)
+module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1, gearDirection = 1, gearThickness=15, hubWallThickness = 10, hubThickness=10, shaftDiameter = 3, setscrewShaftDiameter = 6, setscrewHeadDiameter = 6.2, setscrewOffset = 2, captiveNutDiameter = 6, captiveNutHeight = 6)
 {
 	cp = 360*d/(t1+t2);
 
@@ -102,9 +98,16 @@ module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1, gear_di
 	g1p_r   = g1p_d/2;
 	g2p_r   = g2p_d/2;
 
+shaftRadius = shaftDiameter/2;
+hubDiameter = shaftDiameter + (2*hubWallThickness);
+hubRadius = hubDiameter/2;
+setscrewShaftRadius = setscrewShaftDiameter/2;
+setscrewHeadRadius = setscrewHeadDiameter/2;
+captiveNutRadius = captiveNutDiameter/2;
+
 	echo(str("Your small ", t1, "-toothed gear will be ", g1p_d, "mm across (plus 1 gear tooth size) (PR=", g1p_r,")"));
 	echo(str("Your large ", t2, "-toothed gear will be ", g2p_d, "mm across (plus 1 gear tooth size) (PR=", g2p_r,")"));
-	echo(str("Your minimum drive bolt length (to end of gear) is: ", gear2_bolt_sink+bridge_helper_h, "mm and your max is: ", gear_h+gear_shaft_h, "mm."));
+	echo(str("Your minimum drive bolt length (to end of gear) is: ", gear2_bolt_sink+bridge_helper_h, "mm and your max is: ", gearThickness+hubThickness, "mm."));
 	echo(str("Your gear mount axles should be ", d,"mm (", g1p_r+g2p_r,"mm calculated) from each other."));
 	if(which == 1)
 	{
@@ -112,54 +115,56 @@ module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1, gear_di
 		difference()
 		{
 		
-if(gear_direction == 1) { //default direction, should mesh with the other gear ok unless you flipped the other gear by mistake. Oops!
+if(gearDirection == 1) { //default direction, should mesh with the other gear ok unless you flipped the other gear by mistake. Oops!
+
 union() {
-translate([0,0,(gear_h/2) - TT])
+translate([0,0,(gearThickness/2) - TT])
 				gear(	twist = g1twist, 
 					number_of_teeth=t1, 
 					circular_pitch=cp, 
-					gear_thickness = (gear_h/2)+AT, 
-					rim_thickness = (gear_h/2)+AT, 
+					gear_thickness = (gearThickness/2)+AT, 
+					rim_thickness = (gearThickness/2)+AT, 
 					rim_width = g1p_r,
-					hub_diameter = gear1_hub_diameter,
-					hub_thickness = gear_shaft_h + (gear_h/2)+AT, 
-					bore_diameter=0); 
+					hub_diameter = hubDiameter,
+					hub_thickness = hubThickness + (gearThickness/2)+AT, 
+					bore_diameter = 0); 
 	
-			translate([0,0,(gear_h/2) + AT])
+			translate([0,0,(gearThickness/2) + AT])
 			rotate([180,0,0]) 
 				gear(	twist = -g1twist, 
 					number_of_teeth=t1, 
 					circular_pitch=cp, 
-					gear_thickness = (gear_h/2)+AT, 
-					rim_thickness = (gear_h/2)+AT,
+					gear_thickness = (gearThickness/2)+AT, 
+					rim_thickness = (gearThickness/2)+AT,
 					rim_width = g1p_r,
-					hub_diameter = gear1_hub_diameter, 
+					hub_diameter = hubDiameter, 
 					hub_thickness = 0, 
-					bore_diameter=0); 
+					bore_diameter = 0); 
 }
 
-} else if (gear_direction == 2) { //Custom direction.
+} else if (gearDirection == 2) { //Custom direction.
+
 union() {
-translate([0,0,(gear_h/2) - TT])
+translate([0,0,(gearThickness/2) - TT])
 gear(	twist = -g1twist, 
 					number_of_teeth=t1, 
 					circular_pitch=cp, 
-					gear_thickness = (gear_h/2)+AT, 
-					rim_thickness = (gear_h/2)+AT, 
+					gear_thickness = (gearThickness/2)+AT, 
+					rim_thickness = (gearThickness/2)+AT, 
 					rim_width = g1p_r,
-					hub_diameter = gear1_hub_diameter,
-					hub_thickness = gear_shaft_h + (gear_h/2)+AT, 
+					hub_diameter = hubDiameter,
+					hub_thickness = hubThickness + (gearThickness/2)+AT, 
 					bore_diameter=0); 
 	
-			translate([0,0,(gear_h/2) + AT])
+			translate([0,0,(gearThickness/2) + AT])
 			rotate([180,0,0]) 
 				gear(	twist = g1twist, 
 					number_of_teeth=t1, 
 					circular_pitch=cp, 
-					gear_thickness = (gear_h/2)+AT, 
-					rim_thickness = (gear_h/2)+AT,
+					gear_thickness = (gearThickness/2)+AT, 
+					rim_thickness = (gearThickness/2)+AT,
 					rim_width = g1p_r,
-					hub_diameter = gear1_hub_diameter, 
+					hub_diameter = hubDiameter, 
 					hub_thickness = 0, 
 					bore_diameter=0); 
 }
@@ -168,22 +173,22 @@ gear(	twist = -g1twist,
 			//DIFFERENCE:
 			//shafthole
 			translate([0,0,-TT]) 
-				cylinder(r=gear1_shaft_r, h=gear_h+gear_shaft_h+ST,$fn=10);
+				cylinder(r=shaftRadius, h=gearThickness+hubThickness+ST,$fn=10);
 
 			//setscrew shaft
-			translate([0,0,gear_h+gear_shaft_h-gear1_setscrew_offset])
+			translate([0,0,gearThickness+hubThickness-setscrewOffset])
 				rotate([0,90,0])
-				cylinder(r=gear1_setscrew_r, h=gear1_hub_radius,$fn=20);
+				cylinder(r=setscrewShaftRadius, h=hubRadius,$fn=20);
 
 			//setscrew shaft head clearance
-			translate([gear1_hub_radius,0,gear_h+gear_shaft_h-gear1_setscrew_offset])
+			translate([hubRadius,0,gearThickness+hubThickness-setscrewOffset])
 				rotate([0,90,0])
-				cylinder(r=gear1_setscrew_head_r, h=2*g1p_r,$fn=20); //FIX THIS!! THIS SHOULD NOT BE 2X g1p_r. Should be the actual sie of the gear w/teath!
+				cylinder(r=setscrewHeadRadius, h=2*g1p_r,$fn=20); //FIX THIS!! THIS SHOULD NOT BE 2X g1p_r. Should be the actual size of the gear w/teath!
 
 			//setscrew captive nut
-			translate([(gear1_hub_diameter/2)/2, 0, gear_h+gear_shaft_h-gear1_captive_nut_r-gear1_setscrew_offset]) 
-				translate([0,0,(gear1_captive_nut_r+gear1_setscrew_offset)/2])
-					#cube([gear1_captive_nut_h, gear1_captive_nut_d, gear1_captive_nut_r+gear1_setscrew_offset+ST],center=true);
+			translate([hubRadius/2, 0, gearThickness+hubThickness-captiveNutRadius-setscrewOffset]) 
+				translate([0,0,(captiveNutRadius+setscrewOffset)/2])
+					#cube([captiveNutHeight, captiveNutDiameter, captiveNutRadius+setscrewOffset+ST],center=true);
 			
 		
 		}
@@ -270,7 +275,7 @@ g2p_r   = g2p_d/2;
 
 if(generate == 1)
 {
-	gearsbyteethanddistance(t1 = gear1_teeth, t2=gear2_teeth, d=distance_between_axels, which=1);
+	gearsbyteethanddistance(t1 = gear1_teeth, t2=gear2_teeth, d=100, which=1);
 }
 else if(generate == 2)
 {
