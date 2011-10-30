@@ -94,7 +94,7 @@ cube([lazySusanSide,lazySusanSide,lazySusanOffset],center=true);
 }
 
 module smallGear() {
-gearsbyteethanddistance(t1 = gear1_teeth, t2 = gear2_teeth, d=distance_between_axels, which=1);
+gearsbyteethanddistance(t1 = gear1_teeth, t2 = gear2_teeth, d=distance_between_axels, which=1,gear_direction = 2);
 }
 
 module chopInFour(chop=1) {
@@ -122,8 +122,9 @@ cube(200,200,200);
 
 }
 
+union(){
 smallGear();
 
-//union(){
+
 //chopInFour(4); //Make the gear! (Chopped into quarters!)
-//}
+}

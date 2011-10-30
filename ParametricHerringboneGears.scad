@@ -26,15 +26,16 @@ gear1_shaft_r  = gear1_shaft_d/2;
 // gear1 shaft assumed to fill entire gear.
 // gear1 attaches by means of a captive nut and bolt (or actual setscrew)
 
-hub_Wall_Thickness = 15;
-gear1_hub_diameter = gear1_shaft_d + (2*hub_Wall_Thickness);
+hub_wall_thickness = 15;
+
+gear1_hub_diameter = gear1_shaft_d + (2*hub_wall_thickness);
 gear1_hub_radius = gear1_hub_diameter/2;
 
 gear1_setscrew_offset = gear_shaft_h/2;			// Distance from motor on motor shaft. HALF
 
 gear1_setscrew_d         = 3.5;		
 gear1_setscrew_r          = gear1_setscrew_d/2;
-gear1_setscrew_head_d         = 6;	
+gear1_setscrew_head_d         = 6.2;	
 gear1_setscrew_head_r          = gear1_setscrew_head_d/2;
 gear1_captive_nut_d = 6.2;
 gear1_captive_nut_r  = gear1_captive_nut_d/2;
@@ -89,7 +90,7 @@ module bridge_helper()
 
 
 
-module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1)
+module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1, gear_direction = 1)
 {
 	cp = 360*d/(t1+t2);
 
@@ -110,10 +111,10 @@ module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1)
 		// GEAR 1
 		difference()
 		{
-		union()
-		{
-
-			translate([0,0,(gear_h/2) - TT])
+		
+if(gear_direction == 1) { //default direction, should mesh with the other gear ok unless you flipped the other gear by mistake. Oops!
+union() {
+translate([0,0,(gear_h/2) - TT])
 				gear(	twist = g1twist, 
 					number_of_teeth=t1, 
 					circular_pitch=cp, 
@@ -135,7 +136,35 @@ module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1)
 					hub_diameter = gear1_hub_diameter, 
 					hub_thickness = 0, 
 					bore_diameter=0); 
-		}
+}
+
+} else if (gear_direction == 2) { //Custom direction.
+union() {
+translate([0,0,(gear_h/2) - TT])
+gear(	twist = -g1twist, 
+					number_of_teeth=t1, 
+					circular_pitch=cp, 
+					gear_thickness = (gear_h/2)+AT, 
+					rim_thickness = (gear_h/2)+AT, 
+					rim_width = g1p_r,
+					hub_diameter = gear1_hub_diameter,
+					hub_thickness = gear_shaft_h + (gear_h/2)+AT, 
+					bore_diameter=0); 
+	
+			translate([0,0,(gear_h/2) + AT])
+			rotate([180,0,0]) 
+				gear(	twist = g1twist, 
+					number_of_teeth=t1, 
+					circular_pitch=cp, 
+					gear_thickness = (gear_h/2)+AT, 
+					rim_thickness = (gear_h/2)+AT,
+					rim_width = g1p_r,
+					hub_diameter = gear1_hub_diameter, 
+					hub_thickness = 0, 
+					bore_diameter=0); 
+}
+}
+		
 			//DIFFERENCE:
 			//shafthole
 			translate([0,0,-TT]) 
