@@ -28,6 +28,7 @@ gear1_shaft_r  = gear1_shaft_d/2;
 
 hub_Wall_Thickness = 15;
 gear1_hub_diameter = gear1_shaft_d + (2*hub_Wall_Thickness);
+gear1_hub_radius = gear1_hub_diameter/2;
 
 gear1_setscrew_offset = gear_shaft_h/2;			// Distance from motor on motor shaft. HALF
 
@@ -111,6 +112,7 @@ module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1)
 		{
 		union()
 		{
+
 			translate([0,0,(gear_h/2) - TT])
 				gear(	twist = g1twist, 
 					number_of_teeth=t1, 
@@ -137,17 +139,17 @@ module gearsbyteethanddistance(t1=13,t2=51, d=60, teethtwist=1, which=1)
 			//DIFFERENCE:
 			//shafthole
 			translate([0,0,-TT]) 
-				cylinder(r=gear1_shaft_r, h=gear_h+gear_shaft_h+ST);
+				cylinder(r=gear1_shaft_r, h=gear_h+gear_shaft_h+ST,$fn=10);
 
 			//setscrew shaft
 			translate([0,0,gear_h+gear_shaft_h-gear1_setscrew_offset])
 				rotate([0,90,0])
-				cylinder(r=gear1_setscrew_r, h=gear1_hub_diameter/2);
+				cylinder(r=gear1_setscrew_r, h=gear1_hub_radius,$fn=20);
 
 			//setscrew shaft head clearance
-			translate([0,0,gear_h+gear_shaft_h-gear1_setscrew_offset])
+			translate([gear1_hub_radius,0,gear_h+gear_shaft_h-gear1_setscrew_offset])
 				rotate([0,90,0])
-				cylinder(r=gear1_setscrew_head_r, h=2*g1p_r); //FIX THIS!! THIS SHOULD NOT BE 2X g1p_r. Should be the actual sie of the gear w/teath!
+				cylinder(r=gear1_setscrew_head_r, h=2*g1p_r,$fn=20); //FIX THIS!! THIS SHOULD NOT BE 2X g1p_r. Should be the actual sie of the gear w/teath!
 
 			//setscrew captive nut
 			translate([(gear1_hub_diameter/2)/2, 0, gear_h+gear_shaft_h-gear1_captive_nut_r-gear1_setscrew_offset]) 
