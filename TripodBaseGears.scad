@@ -139,7 +139,7 @@ module sideAxleGear() {
 hubThicknessTemp = 5;
 setscrewOffset = hubThicknessTemp/2;
 
-gearsbyteethanddistance(t1=20,t2=40, d=60, teethtwist=1, which=1, gearDirection = 1, gearThickness=12, hubWallThickness = 10.5, hubThickness = hubThicknessTemp, shaftDiameter = 5.4, setscrewShaftDiameter = 3.5, setscrewHeadDiameter = 6.2, setscrewOffset = setscrewOffset, captiveNutDiameter = 6.2, captiveNutHeight = 3);
+gearsbyteethanddistance(t1=40,t2=20, d=60, teethtwist=1, which=1, gearDirection = 2, gearThickness=12, hubWallThickness = 11, hubThickness = hubThicknessTemp, shaftDiameter = 8.6, setscrewShaftDiameter = 3.5, setscrewHeadDiameter = 6.2, setscrewOffset = setscrewOffset, captiveNutDiameter = 6.2, captiveNutHeight = 3);
 
 }
 
@@ -170,8 +170,8 @@ cube(200,200,200);
 
 union(){
 //smallGear();
-sideStepperGear();
-
+//sideStepperGear();
+sideAxleGear();
 
 //chopInFour(4); //Make the gear! (Chopped into quarters!)
 }
