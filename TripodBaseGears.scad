@@ -143,6 +143,15 @@ gearsbyteethanddistance(t1=40,t2=20, d=60, teethtwist=1, which=1, gearDirection 
 
 }
 
+module telescopingBigGear() {
+//This makes the Big gear that should telescope the tripod
+hubThicknessTemp = 0;
+setscrewOffset = hubThicknessTemp/2;
+
+gearsbyteethanddistance(t1=40,t2=20, d=60, teethtwist=1, which=1, gearDirection = 2, gearThickness=12, hubWallThickness = 11, hubThickness = hubThicknessTemp, shaftDiameter = 8.6, setscrewShaftDiameter = 3.5, setscrewHeadDiameter = 6.2, setscrewOffset = setscrewOffset, captiveNutDiameter = 6.2, captiveNutHeight = 3);
+
+}
+
 module chopInFour(chop=1) {
 intersection() {
 
