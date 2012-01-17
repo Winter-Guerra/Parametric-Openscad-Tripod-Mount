@@ -1,11 +1,42 @@
-//This will make the base for the tripod and the gears that go with it.
+//This is the OpenScad script I coded for generating the different gears
+//required for a xbee and stepper-motor driven camera mount
+//for a school play. More info on the current status of the project can
+//be found at its thingiverse page: 
+//http://www.thingiverse.com/thing:16092
+//or at my code's Github repo here: 
+//https://github.com/xtremd/Parametric-Openscad-Tripod-Mount
+//and here:
+//https://github.com/xtremd/XbeeRemoteCameraRig
 
-use <ParametricHerringboneGears.scad> //Import the gears library
+//Many thanks to Christopher "ScribbleJ" Jansen and Greg Frost for
+//laying the foundational herringbone gear library I used.
 
-//********************
-//*****SETTINGS******
+//This script is released under the Creative Commons CC-BY-SA license which
+//can be read about here: http://creativecommons.org/licenses/by-sa/3.0/us/
+
+//The ParametricHerringboneGears.scad library file created by 
+//Christopher "ScribbleJ" Jansen and Greg Frost is released (by them) under the
+//BSD license (http://opensource.org/licenses/bsd-license.php) and can be found 
+//unaltered at ScribbleJ's Thingiverse page here: 
+//http://www.thingiverse.com/thing:6544
+
+//Now go make something cool!
+
+//-XtremD
+//January 17th, 2012
+
+//*******************
+//**START OF SCRIPT**
+//*******************
+
+//Import the gears library
+use <ParametricHerringboneGears.scad>
+
+//*********************
+//*****SETTINGS********
 //*********************
 
+//Notes to self:
 //Stepper shaft 4.79mm
 //Stepper MOTOR side, 41.9mm
 //Stpper MOTOR height 32.8mm
@@ -41,6 +72,9 @@ lazySusanRadius = (lazySusanDiameter)/2;
 
 bigGearDiameter = lazySusanDiameter+5;
 
+//As I only knew the diameter I needed the base gear to be, I needed
+//OpenScad to calculate the diameter of the smaller, stepper-driven gear
+//while still using the 2:1 gear ratio I wanted. (50:25)
 distance_between_axels = 180*(smallGearTeeth + baseGearTeeth)*(bigGearDiameter)/(baseGearTeeth*360);
 
 

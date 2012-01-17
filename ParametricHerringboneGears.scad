@@ -1,13 +1,24 @@
+//This is a modified version of Christopher "ScribbleJ" Jansen's
+//ParametricHerringboneGears.scad library.
+//I edited the library to be more usable as a library and less of a
+//extruder gear generator tool.
+//Please read the header at the top of the included TripodGears.scad 
+//file for more info.
+
+//-XtremD
+//January 17th, 2012
+
+//Below lies the originally file header:
+//**************************************
 // OpenSCAD Herringbone Wade's Gears Script
 // (c) 2011, Christopher "ScribbleJ" Jansen
 //
 // Thanks to Greg Frost for his great "Involute Gears" script.
 //
 // Licensed under the BSD license.
+//**************************************
 
-include <MCAD/involute_gears.scad> 
-
-//Edited by XtremD
+include <MCAD/involute_gears.scad>
 
 // Tolerances for geometry connections.
 AT=0.02;
